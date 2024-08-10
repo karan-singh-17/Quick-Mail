@@ -1,0 +1,417 @@
+basePath: /
+definitions:
+  handlers.GroupData:
+    properties:
+      csv_file_path:
+        type: string
+      csv_link:
+        type: string
+      html_link:
+        type: string
+      html_path:
+        type: string
+      message:
+        type: string
+      name:
+        type: string
+      recipients:
+        items:
+          type: string
+        type: array
+      subject:
+        type: string
+    type: object
+  models.Group:
+    properties:
+      group_id:
+        type: string
+      message:
+        type: string
+      name:
+        type: string
+      owner_id:
+        type: string
+      recipients:
+        type: string
+      subject:
+        type: string
+    type: object
+host: https://quickmailserver-production.up.railway.app
+info:
+  contact:
+    email: karansingh122134@gmail.com
+    name: Karan Singh
+    url: https://github.com/karan-singh-17/Quick_Mail_server
+  description: 'The Quick Mail API allows users to create groups, add recipients manually
+    or from a CSV file (either from a device or a link), and send messages (plain
+    text, HTML from a link, or an HTML file) to multiple recipients in a single API
+    call. This API is designed to simplify mass email communications by providing
+    flexible options for managing recipient lists and message content. \n ### Use
+    Cases:\n1. **Group Creation and Email Campaigns**: A user can create a group and
+    manually add recipients or import them from a CSV file. The user can then send
+    a message to all members of the group. \n2. **Dynamic Email Campaigns**: If a
+    user has a dynamic list of recipients stored online in a CSV file, they can use
+    the file''s URL to add recipients to the group without manually updating the list.
+    \n3. **HTML Email Campaigns**: Users can send HTML emails either by uploading
+    an HTML file or by providing a link to an HTML template hosted online. \n4. **Simple
+    Text Campaigns**: Users can quickly send plain text messages to a list of recipients
+    without the need for HTML formatting. \n ### Security: \nThe Quick Mail API is
+    secure and incorporates a custom-built two-factor authentication (2FA) system.
+    Upon user registration, a verification email is sent to confirm the user''s email
+    address. When logging in, a 6-digit code is sent to the user''s email, which must
+    be entered to gain access. This ensures that only authorized users can create
+    groups and send messages. Also API''s are incorporated with a jwt_token authentication
+    which allows only active users to manage their groups and hence is secured.'
+  title: Quick Mail API
+  version: "1.0"
+paths:
+  /api/group/create-group:
+    post:
+      consumes:
+      - application/json
+      description: creates a new group. Make sure you are logged in and follow the
+        parameter rules.
+      parameters:
+      - description: Group
+        in: body
+        name: Group
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.GroupData'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successful response with group details
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - jwt_token: []
+      summary: creates a new group
+      tags:
+      - Groups
+  /api/group/delete-group:
+    delete:
+      consumes:
+      - application/json
+      description: deletes an existing group. Make sure you are logged in and are
+        the owner of the group.
+      parameters:
+      - description: Group ID
+        in: body
+        name: group_id
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - jwt_token: []
+      summary: delete a group
+      tags:
+      - Groups
+  /api/group/edit-group:
+    put:
+      consumes:
+      - application/json
+      description: edits the details of a group. Make sure you are logged in and are
+        the owner of the group.
+      parameters:
+      - description: Group
+        in: body
+        name: Group
+        required: true
+        schema:
+          $ref: '#/definitions/models.Group'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - jwt_token: []
+      summary: edit an existing group
+      tags:
+      - Groups
+  /api/group/execute-group:
+    post:
+      consumes:
+      - application/json
+      description: starts the process of sending emails to the recipients. Make sure
+        you are logged in and are the owner of the group.
+      parameters:
+      - description: Group ID
+        in: body
+        name: group_id
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Invalid Input
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Group not found
+          schema:
+            type: string
+        "500":
+          description: Error in sending mails
+          schema:
+            type: string
+      summary: execute/run the group
+      tags:
+      - Groups
+  /api/group/get-groups:
+    get:
+      description: returns all the groups created by the user. Make sure you are logged
+        in and have a valid jwt_token
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Group'
+            type: array
+      security:
+      - jwt_token: []
+      summary: return all groups of the current user
+      tags:
+      - Groups
+  /api/user/current:
+    get:
+      consumes:
+      - application/json
+      description: Checks the provided JWT token in the cookies for validity, and
+        retrieves the user's details from the database.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User information retrieved successfully
+          schema:
+            type: string
+        "401":
+          description: 'Unauthorized: Invalid or missing JWT token'
+          schema:
+            type: string
+        "404":
+          description: User not found
+          schema:
+            type: string
+      summary: Retrieve the current user's information
+      tags:
+      - User
+  /api/user/login:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint verifies user credentials by checking the email and
+        password. If valid, it sends a login code to the user's email for further
+        verification. The request must be a POST method with a JSON body containing
+        "email" and "password". The login code is stored temporarily for verification
+        purposes.
+      parameters:
+      - description: Email and Password
+        in: body
+        name: credentials
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login code sent to email
+          schema:
+            type: string
+        "400":
+          description: 'Invalid Input: Error parsing JSON body'
+          schema:
+            type: string
+        "401":
+          description: 'Unauthorized: Invalid email or password'
+          schema:
+            type: string
+        "500":
+          description: 'Internal Server Error: Failed to send login code'
+          schema:
+            type: string
+      summary: Authenticate user and send login code
+      tags:
+      - User Authentication
+  /api/user/logout:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint logs out the user by clearing the JWT token cookie.
+        The request must be a POST method. Upon successful sign-out, the JWT token
+        is removed from the cookies, and a success message is returned.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully signed out
+          schema:
+            type: string
+        "405":
+          description: 'Method Not Allowed: Invalid request method'
+          schema:
+            type: string
+      summary: Sign out the user and clear the JWT token
+      tags:
+      - User Authentication
+  /api/user/register:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows a new user to register by providing an email
+        and password. The email is checked for existing registration, and a verification
+        token is generated and sent via email. The user must verify their email to
+        complete the registration process.
+      parameters:
+      - description: User Registration Data
+        in: body
+        name: user
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User registered. Please check your email to verify your account."
+            "User registration successful
+          schema:
+            type: string
+        "400":
+          description: Invalid request body
+          schema:
+            type: string
+        "409":
+          description: Email is already registered
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Register a new user
+      tags:
+      - User
+  /api/user/verify-login-code:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint verifies the provided login code for the specified
+        email. If the code is valid, a JWT token is generated and set as a cookie
+        in the response.
+      parameters:
+      - description: Email and login code
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful
+          schema:
+            type: string
+        "400":
+          description: 'Invalid Input: Error parsing request body'
+          schema:
+            type: string
+        "401":
+          description: 'Unauthorized: Invalid or expired login code'
+          schema:
+            type: string
+        "500":
+          description: 'Internal Server Error: Failed to generate token'
+          schema:
+            type: string
+      summary: Verify the login code and generate JWT token
+      tags:
+      - User Authentication
+  /api/user/verify/{token}:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint verifies a user by checking a token from the URL
+        path. If the token is valid and exists in the temporary store, the user is
+        created in the database. The response format depends on the 'Accept' header
+        in the request. JSON is returned if the header contains 'application/json';
+        otherwise, an HTML template is rendered.
+      parameters:
+      - description: Verification Token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User verified and created successfully
+          schema:
+            type: string
+        "400":
+          description: Invalid or expired token
+          schema:
+            type: string
+        "500":
+          description: 'Internal Server Error: Failed to create user'
+          schema:
+            type: string
+      summary: Verify user based on token
+      tags:
+      - User Verification
+swagger: "2.0"

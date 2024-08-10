@@ -1,0 +1,581 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "The Quick Mail API allows users to create groups, add recipients manually or from a CSV file (either from a device or a link), and send messages (plain text, HTML from a link, or an HTML file) to multiple recipients in a single API call. This API is designed to simplify mass email communications by providing flexible options for managing recipient lists and message content. \\n ### Use Cases:\\n1. **Group Creation and Email Campaigns**: A user can create a group and manually add recipients or import them from a CSV file. The user can then send a message to all members of the group. \\n2. **Dynamic Email Campaigns**: If a user has a dynamic list of recipients stored online in a CSV file, they can use the file's URL to add recipients to the group without manually updating the list. \\n3. **HTML Email Campaigns**: Users can send HTML emails either by uploading an HTML file or by providing a link to an HTML template hosted online. \\n4. **Simple Text Campaigns**: Users can quickly send plain text messages to a list of recipients without the need for HTML formatting. \\n ### Security: \\nThe Quick Mail API is secure and incorporates a custom-built two-factor authentication (2FA) system. Upon user registration, a verification email is sent to confirm the user's email address. When logging in, a 6-digit code is sent to the user's email, which must be entered to gain access. This ensures that only authorized users can create groups and send messages. Also API's are incorporated with a jwt_token authentication which allows only active users to manage their groups and hence is secured.",
+        "title": "Quick Mail API",
+        "contact": {
+            "name": "Karan Singh",
+            "url": "https://github.com/karan-singh-17/Quick_Mail_server",
+            "email": "karansingh122134@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "host": "https://quickmailserver-production.up.railway.app",
+    "basePath": "/",
+    "paths": {
+        "/api/group/create-group": {
+            "post": {
+                "security": [
+                    {
+                        "jwt_token": []
+                    }
+                ],
+                "description": "creates a new group. Make sure you are logged in and follow the parameter rules.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Groups"
+                ],
+                "summary": "creates a new group",
+                "parameters": [
+                    {
+                        "description": "Group",
+                        "name": "Group",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.GroupData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful response with group details",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/group/delete-group": {
+            "delete": {
+                "security": [
+                    {
+                        "jwt_token": []
+                    }
+                ],
+                "description": "deletes an existing group. Make sure you are logged in and are the owner of the group.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Groups"
+                ],
+                "summary": "delete a group",
+                "parameters": [
+                    {
+                        "description": "Group ID",
+                        "name": "group_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/group/edit-group": {
+            "put": {
+                "security": [
+                    {
+                        "jwt_token": []
+                    }
+                ],
+                "description": "edits the details of a group. Make sure you are logged in and are the owner of the group.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Groups"
+                ],
+                "summary": "edit an existing group",
+                "parameters": [
+                    {
+                        "description": "Group",
+                        "name": "Group",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Group"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/group/execute-group": {
+            "post": {
+                "description": "starts the process of sending emails to the recipients. Make sure you are logged in and are the owner of the group.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Groups"
+                ],
+                "summary": "execute/run the group",
+                "parameters": [
+                    {
+                        "description": "Group ID",
+                        "name": "group_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Invalid Input",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Group not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Error in sending mails",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/group/get-groups": {
+            "get": {
+                "security": [
+                    {
+                        "jwt_token": []
+                    }
+                ],
+                "description": "returns all the groups created by the user. Make sure you are logged in and have a valid jwt_token",
+                "tags": [
+                    "Groups"
+                ],
+                "summary": "return all groups of the current user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Group"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/current": {
+            "get": {
+                "description": "Checks the provided JWT token in the cookies for validity, and retrieves the user's details from the database.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Retrieve the current user's information",
+                "responses": {
+                    "200": {
+                        "description": "User information retrieved successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized: Invalid or missing JWT token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/login": {
+            "post": {
+                "description": "This endpoint verifies user credentials by checking the email and password. If valid, it sends a login code to the user's email for further verification. The request must be a POST method with a JSON body containing \"email\" and \"password\". The login code is stored temporarily for verification purposes.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Authentication"
+                ],
+                "summary": "Authenticate user and send login code",
+                "parameters": [
+                    {
+                        "description": "Email and Password",
+                        "name": "credentials",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login code sent to email",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Input: Error parsing JSON body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized: Invalid email or password",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Failed to send login code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/logout": {
+            "post": {
+                "description": "This endpoint logs out the user by clearing the JWT token cookie. The request must be a POST method. Upon successful sign-out, the JWT token is removed from the cookies, and a success message is returned.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Authentication"
+                ],
+                "summary": "Sign out the user and clear the JWT token",
+                "responses": {
+                    "200": {
+                        "description": "Successfully signed out",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Invalid request method",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/register": {
+            "post": {
+                "description": "This endpoint allows a new user to register by providing an email and password. The email is checked for existing registration, and a verification token is generated and sent via email. The user must verify their email to complete the registration process.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Register a new user",
+                "parameters": [
+                    {
+                        "description": "User Registration Data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User registered. Please check your email to verify your account.\" \"User registration successful",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Email is already registered",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/verify-login-code": {
+            "post": {
+                "description": "This endpoint verifies the provided login code for the specified email. If the code is valid, a JWT token is generated and set as a cookie in the response.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Authentication"
+                ],
+                "summary": "Verify the login code and generate JWT token",
+                "parameters": [
+                    {
+                        "description": "Email and login code",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Input: Error parsing request body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized: Invalid or expired login code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Failed to generate token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/verify/{token}": {
+            "get": {
+                "description": "This endpoint verifies a user by checking a token from the URL path. If the token is valid and exists in the temporary store, the user is created in the database. The response format depends on the 'Accept' header in the request. JSON is returned if the header contains 'application/json'; otherwise, an HTML template is rendered.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Verification"
+                ],
+                "summary": "Verify user based on token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Verification Token",
+                        "name": "token",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User verified and created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid or expired token",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Failed to create user",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "handlers.GroupData": {
+            "type": "object",
+            "properties": {
+                "csv_file_path": {
+                    "type": "string"
+                },
+                "csv_link": {
+                    "type": "string"
+                },
+                "html_link": {
+                    "type": "string"
+                },
+                "html_path": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "recipients": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Group": {
+            "type": "object",
+            "properties": {
+                "group_id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "owner_id": {
+                    "type": "string"
+                },
+                "recipients": {
+                    "type": "string"
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

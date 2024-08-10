@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #fff;
+        }
+        .header img {
+            width: 50px;
+            vertical-align: middle;
+        }
+        .header h1 {
+            display: inline;
+            font-size: 24px;
+            color: #fff;
+            margin: 0;
+            padding-left: 10px;
+        }
+        .body {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Center align the body content */
+        }
+        .code-box {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 20px; /* Increase font size */
+            white-space: pre-wrap; /* Maintains whitespace */
+            word-wrap: break-word;
+            display: inline-block; /* Center-align the box */
+            max-width: 80%; /* Restrict the box width */
+            text-align: center; /* Center the text inside the box */
+            margin: 0 auto; /* Center the box horizontally */
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 2px solid #fff;
+            font-size: 14px;
+            color: #fff;
+        }
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://image.shutterstock.com/image-vector/email-icon-260nw-1913179780.jpg" alt="Mail Logo">
+            <h1>Quick Mail</h1>
+        </div>
+        <div class="body">
+            <div class="code-box">
+                {{TOKEN}}
+            </div>
+        </div>
+        <div class="footer">
+            Created by Karan Singh &copy; 2024<br>
+            <a href="https://www.linkedin.com/in/karan-singh" target="_blank">LinkedIn</a> |
+            <a href="https://github.com/karan-singh" target="_blank">GitHub</a>
+        </div>
+    </div>
+</body>
+</html>

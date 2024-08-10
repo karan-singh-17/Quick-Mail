@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            padding: 20px;
+        }
+        .container {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        .header {
+            font-size: 24px;
+            margin-bottom: 40px;
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 12px;
+        }
+        .content {
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">Quick Mailer</div>
+        <div class="content">
+            <p>Please click the following link to verify your account:</p>
+            <a href="https://quickmailserver-production.up.railway.app/api/user/verify/{{TOKEN}}" class="button">Verify Account</a>
+        </div>
+        <div class="footer">Created By Karan Singh<br>&copy; 2024 Quick Mailer</div>
+    </div>
+</body>
+</html>

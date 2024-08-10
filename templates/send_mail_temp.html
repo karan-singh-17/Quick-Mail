@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Mail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            background-color: #eae0d5;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #c6ac8f;
+            color: white;
+            padding: 20px;
+        }
+        .header img {
+            vertical-align: middle;
+            width: 40px;
+            height: 40px;
+        }
+        .header h1 {
+            display: inline-block;
+            margin: 0;
+            padding-left: 10px;
+            font-size: 24px;
+            vertical-align: middle;
+        }
+        .content {
+            padding: 40px;
+            text-align: center;
+        }
+        .content .message {
+            display: inline-block;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .footer {
+            background-color: #22333b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .footer p {
+            margin: 0;
+        }
+        .footer .social-links a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/mail.png" alt="Mail Logo">
+            <h1>Quick Mail</h1>
+        </div>
+        <div class="content">
+            <div class="message">
+                <!-- Placeholder for message -->
+                {{MESSAGE}}
+            </div>
+        </div>
+        <div class="footer">
+            <p>Created by Karan Singh</p>
+            <br>
+            <p>&copy; 2024</p>
+            <br>
+            <div class="social-links">
+                <a href="www.linkedin.com/in/karansingh140">LinkedIn</a>
+                <a href="https://github.com/karan-singh-17">GitHub</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
