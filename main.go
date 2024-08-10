@@ -25,10 +25,10 @@ import (
 // @securityDefinitions.jwt_token.description "JWT token for authentication"
 func main() {
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
+	//err := godotenv.Load()
+	//if err != nil {
+	//	log.Fatalf("Error loading .env file")
+	//}
 
 	database.Connect()
 
