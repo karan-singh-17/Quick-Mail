@@ -6,13 +6,20 @@ It allows users to input recipients manually or via an online .csv file link. Si
 The service includes a custom-built two-factor authentication system that sends a verification code to the user's email, ensuring secure access.  
 Additionally, Quick Mail can accept file paths for .csv or HTML files from the local machine when the server is run locally.
 
+## Live Demo
+
+
+```https
+  https://quickmailserver-production.up.railway.app
+```
+
 # API Reference
 
 ## User
 
 ### Register
 
-```http
+```https
   POST /api/user/register
 ```
 
@@ -25,7 +32,7 @@ Additionally, Quick Mail can accept file paths for .csv or HTML files from the l
 
 ### Verify
 
-```http
+```https
   GET /api/user/verify/
 ```
 
@@ -37,7 +44,7 @@ Additionally, Quick Mail can accept file paths for .csv or HTML files from the l
 
 ### Login
 
-```http
+```https
   POST /api/user/login
 ```
 
@@ -50,7 +57,7 @@ Additionally, Quick Mail can accept file paths for .csv or HTML files from the l
 
 ### Verify Login
 
-```http
+```https
   POST /api/user/verify-login-code
 ```
 
@@ -63,7 +70,7 @@ Additionally, Quick Mail can accept file paths for .csv or HTML files from the l
 
 ### Logout
 
-```http
+```https
   POST /api/user/logout
 ```
 
@@ -75,7 +82,7 @@ Additionally, Quick Mail can accept file paths for .csv or HTML files from the l
 
 ### Current User Information
 
-```http
+```https
   GET /api/user/curr-user
 ```
 
@@ -89,7 +96,7 @@ Additionally, Quick Mail can accept file paths for .csv or HTML files from the l
 
 ### Create Group
 
-```http
+```https
   POST /api/group/create-group
 ```
 
@@ -108,7 +115,7 @@ Additionally, Quick Mail can accept file paths for .csv or HTML files from the l
 
 ### Get Groups
 
-```http
+```https
   GET /api/group/get-groups
 ```
 
@@ -120,7 +127,7 @@ Additionally, Quick Mail can accept file paths for .csv or HTML files from the l
 
 ### Execute Group
 
-```http
+```https
   POST /api/group/execute-group
 ```
 
@@ -133,7 +140,7 @@ Additionally, Quick Mail can accept file paths for .csv or HTML files from the l
 
 ### Edit Group
 
-```http
+```https
   PUT /api/group/edit-group
 ```
 
@@ -151,7 +158,7 @@ Additionally, Quick Mail can accept file paths for .csv or HTML files from the l
 
 ### Delete Group
 
-```http
+```https
   DELETE /api/group/delete-group
 ```
 
